@@ -4,7 +4,7 @@
     <title>Project XS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" href= "./css/themes/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="./css/themes/jquery.mobile-1.4.5.min.css" />
     <link rel="stylesheet" href="./css/themes/p1.css" />
 
     <script src="./scripts/jquery-1.11.1.min.js"></script>
@@ -13,95 +13,112 @@
   </head>
 
   <body>
-      <div data-role="page">
-        <div class="ui-content">
-          <div data-role="control-group" data-type="horizontal">
-            <div class="ui-grid-c ui-responsive">
-              <div class="ui-block-a"> <!-- Tiffany -->
+    <div data-role="page">
+      <div class="ui-content">
+        <div data-role="control-group" data-type="horizontal">
+          <div class="ui-grid-c ui-responsive">
+            <div class="ui-block-a"><!-- Tiffany --></div>
 
-              </div>
-
-              <div class="ui-block-b"> <!-- Alexandra -->
-
-              </div>
-
-              <div class="ui-block-c"> <!-- Tahira -->
-
-              </div>
-
-              <div class="ui-block-a"> <!-- Tiffany -->
-
-              </div>
-
-              <div class="ui-block-b"> <!-- Alexandra -->
-
-              </div>
-
-              <div class="ui-block-c"> <!-- Tahira -->
-
-              </div>
-
-              <div class = "ui-block-d"></div>
-
-              <div class="ui-block-a"> <!-- Tiffany -->
-
-              </div>
-
-              <div class="ui-block-b"> <!-- Alexandra -->
-
-              </div>
-
-              <div class="ui-block-c"> <!-- Tahira -->
-
-              </div>
-
-              <div class = "ui-block-d"></div>
-
-              <div class="ui-block-a"> <!-- Tiffany -->
-
-              </div>
-
-              <div class="ui-block-b"> <!-- Alexandra -->
-
-              </div>
-
-              <div class="ui-block-c"> <!-- Tahira -->
-
-              </div>
-
-              <div class = "ui-block-d"></div>
-
-              <div class="ui-block-a"> <!-- Tiffany -->
-
-              </div>
-
-              <div class="ui-block-b"> <!-- Alexandra -->
-
-              </div>
-
-              <div class="ui-block-c"> <!-- Tahira -->
-
-              </div>
-
-              <div class = "ui-block-d"></div>
-
-              <div class="ui-block-a"> <!-- Tiffany -->
-
-              </div>
-
-              <div class="ui-block-b"> <!-- Alexandra -->
-
-              </div>
-
-              <div class="ui-block-c"> <!-- Tahira -->
-
-              </div>
-
-              <div class = "ui-block-d"></div>
-
+            <div class="ui-block-b">
+              <!-- Alexandra -->
+              <img
+                src="shipCrate.jpg"
+                alt="cratePhoto"
+                height="194px"
+                width="260px"
+              />
             </div>
+
+            <div class="ui-block-c"><!-- Tahira --></div>
+
+            <div class="ui-block-a"><!-- Tiffany --></div>
+
+            <div class="ui-block-b">
+              <!-- Alexandra -->
+              <!--Blank block-->
+            </div>
+
+            <div class="ui-block-c"><!-- Tahira --></div>
+
+            <div class="ui-block-d"></div>
+
+            <div class="ui-block-a"><!-- Tiffany --></div>
+
+            <div class="ui-block-b">
+              <!-- Alexandra -->
+              <!--Opaque construction menu-->
+              <select id="insulationOptions" onchange="changeInsulation()">
+                <option value="default">
+                  OPAQUE CONSTRUCTION WITH R or R/INCH
+                </option>
+                <option value="bare container">Bare Container (R1)</option>
+                <option value="interior finish">
+                  Plus Interior Finish, Uninsulated (R2)
+                </option>
+                <option value="finish and cellulose">
+                  Plus Finish and Cellulose (R3/in)
+                </option>
+                <option value="finish and fiberglass">
+                  Plus Finish and Fiberglass (R3/in)
+                </option>
+                <option value="finish and spray foam">
+                  Plus Finish and Spray Foam (R6/in)
+                </option>
+              </select>
+            </div>
+
+            <div class="ui-block-c"><!-- Tahira --></div>
+
+            <div class="ui-block-d"></div>
+
+            <div class="ui-block-a"><!-- Tiffany --></div>
+
+            <div class="ui-block-b">
+              <!-- Alexandra -->
+              <input
+                type="range"
+                name="doorThermalResistanceSlider"
+                id="doorSlider"
+              />
+              <label for="slider-1">(R) Door Thermal Resistance</label>
+              <!--Slider and (R) Door resistance field-->
+            </div>
+
+            <div class="ui-block-c"><!-- Tahira --></div>
+
+            <div class="ui-block-d"></div>
+
+            <div class="ui-block-a"><!-- Tiffany --></div>
+
+            <div class="ui-block-b">
+              <!-- Alexandra -->
+              <!--Effective overall thermal resistance field-->
+            </div>
+
+            <div class="ui-block-c"><!-- Tahira --></div>
+
+            <div class="ui-block-d"></div>
+
+            <div class="ui-block-a"><!-- Tiffany --></div>
+
+            <div class="ui-block-b">
+              <!-- Alexandra -->
+              <!--Readouts menu-->
+              <select id="readoutsMenu">
+                <option value="default">READOUTS</option>
+                <option value="bare container">Net to Gross Floor Area</option>
+                <option value="finish and spray foam">
+                  Energy Bill Per Next Floor Area
+                </option>
+              </select>
+            </div>
+
+            <div class="ui-block-c"><!-- Tahira --></div>
+
+            <div class="ui-block-d"></div>
           </div>
         </div>
+      </div>
     </div>
   </body>
 </html>
