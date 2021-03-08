@@ -61,7 +61,7 @@
             <div class="ui-block-a"> <div class="ui-block-a">
               
               <div>
-                <select id="degrees">
+                <select id="degrees" data-theme = "c">
                   <option>PLACES WITH DEGREE DAYS</option>
                   <option value = 13030>NV Alert - 13030</option>
                   <option value = 9980>NV Iqaluit - 9980</option>
@@ -91,7 +91,7 @@
             <div class="ui-block-b">
               <!-- Alexandra -->
               <!--Opaque construction menu-->
-              <select id="insulationOptions" onchange="changeInsulation()">
+              <select id="insulationOptions" onchange="changeInsulation()" data-theme = "c">
                 <option value="default">
                   OPAQUE CONSTRUCTION WITH R or R/INCH
                 </option>
@@ -130,8 +130,14 @@
                 type="range"
                 name="doorThermalResistanceSlider"
                 id="doorSlider"
+                data-theme = "c"
               />
-              <label for="slider-1">(R) Door Thermal Resistance</label>
+              <table>
+                <tr>
+                  <td><input id = "doorSliderReadout" class="readout" type ="text" for ="doorSlider"></input></td>
+                  <td>(R) Door Thermal Resistance</td>
+                </tr>
+              </table>
               <!--Slider and (R) Door resistance field-->
             </div>
 
@@ -176,6 +182,12 @@
             <div class="ui-block-b">
               <!-- Alexandra -->
               <!--Effective overall thermal resistance field-->
+              <table>
+                <tr>
+                  <td><input id = "effectiveOverallReadout" class="readout" type ="text"></input></td>
+                  <td>(R) Effective Overall Thermal Resistance</td>
+                </tr>
+              </table>
             </div>
 
 
@@ -197,9 +209,9 @@
               <!-- Alexandra -->
               <!--Readouts menu-->
               <select id="readoutsMenu">
-                <option value="default">READOUTS</option>
-                <option value="bare container">Net to Gross Floor Area</option>
-                <option value="finish and spray foam">
+                <option>READOUTS</option>
+                <option disabled="disabled">Net to Gross Floor Area</option>
+                <option disabled="disabled">
                   Energy Bill Per Next Floor Area
                 </option>
               </select>
