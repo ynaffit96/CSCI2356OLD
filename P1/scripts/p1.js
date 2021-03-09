@@ -129,7 +129,7 @@ function draw(construction, window) {
   //Draw outer wall
   contextP.setLineDash([0]);
   contextP.strokeStyle = "#3104fb";
-  contextP.lineWidth = MAGNIFIER * 2;
+  contextP.lineWidth = MAGNIFIER;
   contextP.beginPath();
   contextP.strokeRect(
     MAGNIFIER,
@@ -221,6 +221,7 @@ function draw(construction, window) {
   contextP.setLineDash([4, 3]);
   contextP.fillStyle = "#d2cbcd";
   contextP.beginPath();
+  
   contextP.fillRect(
     DOOR_X,
     ((178 * 3) / 4 -
@@ -234,7 +235,8 @@ function draw(construction, window) {
     construction * MAGNIFIER + Number(2 * MAGNIFIER) * 2
   );
   contextP.closePath();
-
+  
+    if(construction*MAGNIFIER>=4){
   contextP.setLineDash([4, 3]);
   contextP.strokeStyle = "black";
   contextP.beginPath();
@@ -259,6 +261,7 @@ function draw(construction, window) {
       2 +
       MAGNIFIER
   );
+    }
 
   // Bottom dashed line
   contextP.moveTo(
