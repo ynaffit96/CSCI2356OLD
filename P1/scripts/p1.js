@@ -1,3 +1,19 @@
+
+function init() {
+
+  $("#windowSlider").on("change", function () {
+    processInput();
+  });
+
+  $("#opaqueThick").on("change", function () {
+    processInput();
+  });
+
+  let construction = $("#opaqueThick").val();
+  let constructionType = $("#insulationOptions option:selected").val();
+  let window = $("#windowSlider").val();
+  draw(construction,window);
+}
 // dropdown menu constants for insulation
 const BARE = "Bare Container (R1)";
 const FINISH_ONLY = "Plus Interior Finish, Uninsulated (R2)";
@@ -14,7 +30,6 @@ const CONTAINER_HEIGHT = CANVAS_HEIGHT - DOOR_LENGTH;
 
 //When drawing on canvas, always multiply constants by multiplier
 const MAGNIFIER = 1.35;
-const SCL = 1.35;
 
 //Adjusted container sizes for drawing
 const ADJ_CONTAINER_WIDTH = CONTAINER_WIDTH * MAGNIFIER;
@@ -48,6 +63,124 @@ function changeInsulation() {
     context.fillRect(0, 0, ADJ_CONTAINER_WIDTH, ADJ_CONTAINER_HEIGHT);
   }
 }
+
+/* This function draws the logo in the first block of the grid
+   
+  Tiffany Conrad (A00414194)
+*/
+function drawLogo() {
+  let logo = document.getElementById("log");
+  let context = logo.getContext("2d");
+
+  context.font = "bold 30px Georgia";
+  context.fillStyle = "blue";
+  context.fillText("PROJECT XS", 50, 89);
+}
+
+/*
+  This function processes input from the opaque Thickness slider and the window slider, then draws the canvases according to 
+  the given values of sliders and insulation options
+
+  @author Tiffany Conrad (A00414194)
+*/
+function processInput() {
+  let construction = $("#opaqueThick").val();
+  let constructionType = $("#insulationOptions option:selected").val();
+  let window = $("#windowSlider").val();
+  draw(construction, window);
+}
+
+/*
+  This function draws the changes made by the Opaque Thickness Slider, as well as the window Slider.
+
+  construction is the number value from the Opaque Thickness Slider
+  window is the value from the Window slider
+
+  @author Tiffany Conrad-- All drawings made on the plan Canvas
+  @author
+*/
+
+function draw(construction, window) {
+  let plan = document.getElementById("plan");
+  let contextP = plan.getContext("2d");
+
+  contextP.clearRect(0, 0, plan.width, 178);
+
+  // Slab
+  contextP.fillStyle = "#d2cbcd";
+  contextP.fillRect(0, 0, plan.width, 182);
+
+  //Draw outer wall
+  contextP.strokeStyle = "#3104fb";
+  contextP.lineWidth = MAGNIFIER * 2;
+  contextP.strokeRect(
+    MAGNIFIER,
+    MAGNIFIER,
+    plan.width - MAGNIFIER * 2,
+    (178 * 3) / 4 - 2 * MAGNIFIER
+  );
+
+  // Draw Door
+  contextP.strokeStyle = "black";
+  contextP.lineWidth = MAGNIFIER * 2;
+  contextP.beginPath();
+  contextP.moveTo((plan.width * 2) / 3, (178 * 3) / 4);
+  contextP.lineTo((plan.width * 2) / 3, 178 * 27 * MAGNIFIER);
+  contextP.stroke();
+
+  // Draw door swing
+  contextP.strokeStyle = "black";
+  contextP.lineWidth = MAGNIFIER;
+  contextP.beginPath();
+  contextP.setLineDash([4, 3]);
+  contextP.arc(
+    (plan.width * 2) / 3,
+    (178 * 3) / 4,
+    3 * 12 * MAGNIFIER,
+    0,
+    Math.PI * 0.5
+  );
+  contextP.stroke();
+
+  // TODO Draw insulation HERE
+
+  // Inner Wall
+  contextP.beginPath();
+  contextP.setLineDash([0]);
+  contextP.fillStyle="#d2cbcd"
+  contextP.lineWidth = MAGNIFIER * 2;
+  contextP.strokeStyle = "#3104fb";
+  contextP.strokeRect(
+    construction*MAGNIFIER+4,
+    construction*MAGNIFIER+4,
+    plan.width-2*construction*MAGNIFIER-8,
+    ((178 * 3) / 4 - 2 * MAGNIFIER) - 2 * construction * MAGNIFIER - Number(4)
+  );
+
+  $("#opaqueThickness").on("change", function () {
+    processInput();
+  });
+
+  
+
+  // Draw Plan Window
+  if(window >= 4){
+  contextP.fillStyle = "#07ebf8";
+  contextP.fillRect( 
+    (plan.width/3 * MAGNIFIER - Number(window/2) * MAGNIFIER)-25,
+    ((((178 * 3) / 4 - 2 * MAGNIFIER) - 2 * construction * MAGNIFIER - Number(4))+((178 * 3) / 4 - 2 * MAGNIFIER))/2+MAGNIFIER,
+    2*Number(window/2*MAGNIFIER),
+    construction*MAGNIFIER+Number(2*MAGNIFIER)
+    );
+  }
+
+  
+
+  $("#windowSlider").on("change", function () {
+    processInput();
+  });
+}
+
 
 function setup() {
   drawLogo();
@@ -122,3 +255,4 @@ function drawPlan() {
   let window = $("#windowSlider").val();
   context.fillStyle = "#07ebf8";
 }
+
