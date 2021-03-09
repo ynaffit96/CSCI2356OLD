@@ -1,6 +1,4 @@
-
 function init() {
-
   $("#windowSlider").on("change", function () {
     processInput();
   });
@@ -12,7 +10,7 @@ function init() {
   let construction = $("#opaqueThick").val();
   let constructionType = $("#insulationOptions option:selected").val();
   let window = $("#windowSlider").val();
-  draw(construction,window);
+  draw(construction, window);
 }
 // dropdown menu constants for insulation
 const BARE = "Bare Container (R1)";
@@ -35,7 +33,7 @@ const MAGNIFIER = 1.35;
 const ADJ_CONTAINER_WIDTH = CONTAINER_WIDTH * MAGNIFIER;
 const ADJ_CONTAINER_HEIGHT = CONTAINER_HEIGHT * MAGNIFIER;
 
-/*Selects the appropriate color to represent
+/* Selects the appropriate color to represent
 the selected insulation option
 Author: Alexandra Embree (A00443068)*/
 function changeInsulation() {
@@ -111,16 +109,6 @@ function draw(construction, window) {
   contextP.fillStyle = "#d2cbcd";
   contextP.fillRect(0, 0, plan.width, 182);
 
-  //Draw outer wall
-  contextP.strokeStyle = "#3104fb";
-  contextP.lineWidth = MAGNIFIER * 2;
-  contextP.strokeRect(
-    MAGNIFIER,
-    MAGNIFIER,
-    plan.width - MAGNIFIER * 2,
-    (178 * 3) / 4 - 2 * MAGNIFIER
-  );
-
   // Draw Door
   contextP.strokeStyle = "black";
   contextP.lineWidth = MAGNIFIER * 2;
@@ -144,44 +132,65 @@ function draw(construction, window) {
   contextP.stroke();
 
   // TODO Draw insulation HERE
+  changeInsulation();
+
+  //Draw outer wall
+  contextP.setLineDash([0]);
+  contextP.strokeStyle = "#3104fb";
+  contextP.lineWidth = MAGNIFIER * 2;
+  contextP.strokeRect(
+    MAGNIFIER,
+    MAGNIFIER,
+    plan.width - MAGNIFIER * 2,
+    (178 * 3) / 4 - 2 * MAGNIFIER
+  );
 
   // Inner Wall
   contextP.beginPath();
-  contextP.setLineDash([0]);
-  contextP.fillStyle="#d2cbcd"
+  contextP.fillStyle = "#d2cbcd";
   contextP.lineWidth = MAGNIFIER * 2;
   contextP.strokeStyle = "#3104fb";
   contextP.strokeRect(
-    construction*MAGNIFIER+4,
-    construction*MAGNIFIER+4,
-    plan.width-2*construction*MAGNIFIER-8,
-    ((178 * 3) / 4 - 2 * MAGNIFIER) - 2 * construction * MAGNIFIER - Number(4)
+    construction * MAGNIFIER + 4,
+    construction * MAGNIFIER + 4,
+    plan.width - 2 * construction * MAGNIFIER - 8,
+    (178 * 3) / 4 - 2 * MAGNIFIER - 2 * construction * MAGNIFIER - Number(4)
+  );
+
+  //Inner slab
+  contextP.fillStyle = "#d2cbcd";
+  contextP.fillRect(
+    construction * MAGNIFIER + 4,
+    construction * MAGNIFIER + 4,
+    plan.width - 2 * construction * MAGNIFIER - 8,
+    (178 * 3) / 4 - 2 * MAGNIFIER - 2 * construction * MAGNIFIER - Number(4)
   );
 
   $("#opaqueThickness").on("change", function () {
     processInput();
   });
 
-  
-
   // Draw Plan Window
-  if(window >= 4){
-  contextP.fillStyle = "#07ebf8";
-  contextP.fillRect( 
-    (plan.width/3 * MAGNIFIER - Number(window/2) * MAGNIFIER)-25,
-    ((((178 * 3) / 4 - 2 * MAGNIFIER) - 2 * construction * MAGNIFIER - Number(4))+((178 * 3) / 4 - 2 * MAGNIFIER))/2+MAGNIFIER,
-    2*Number(window/2*MAGNIFIER),
-    construction*MAGNIFIER+Number(2*MAGNIFIER)
+  if (window >= 4) {
+    contextP.fillStyle = "#07ebf8";
+    contextP.fillRect(
+      (plan.width / 3) * MAGNIFIER - Number(window / 2) * MAGNIFIER - 25,
+      ((178 * 3) / 4 -
+        2 * MAGNIFIER -
+        2 * construction * MAGNIFIER -
+        Number(4) +
+        ((178 * 3) / 4 - 2 * MAGNIFIER)) /
+        2 +
+        MAGNIFIER,
+      2 * Number((window / 2) * MAGNIFIER),
+      construction * MAGNIFIER + Number(2 * MAGNIFIER)
     );
   }
-
-  
 
   $("#windowSlider").on("change", function () {
     processInput();
   });
 }
-
 
 function setup() {
   drawLogo();
@@ -256,4 +265,3 @@ function drawPlan() {
   let window = $("#windowSlider").val();
   context.fillStyle = "#07ebf8";
 }
-
