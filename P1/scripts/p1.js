@@ -46,16 +46,16 @@ function changeInsulation() {
     context.fillStyle = "#d2cbcd";
     context.fillRect(0, 0, ADJ_CONTAINER_WIDTH, ADJ_CONTAINER_HEIGHT);
   } else if (choice == FINISH_ONLY) {
-    context.fillStyle = "#e8e5e4";
+    context.fillStyle = "#d2cbcd";
     context.fillRect(0, 0, ADJ_CONTAINER_WIDTH, ADJ_CONTAINER_HEIGHT);
   } else if (choice == CELLULOSE) {
-    context.fillStyle = "#fec7d4";
+    context.fillStyle = "#e8e5e4";
     context.fillRect(0, 0, ADJ_CONTAINER_WIDTH, ADJ_CONTAINER_HEIGHT);
   } else if (choice == FIBERGLASS) {
-    context.fillStyle = "#fdfaaa";
+    context.fillStyle = "#fec7d4";
     context.fillRect(0, 0, ADJ_CONTAINER_WIDTH, ADJ_CONTAINER_HEIGHT);
   } else if (choice == SPRAY_FOAM) {
-    context.fillStyle = "#07ebf8";
+    context.fillStyle = "#fdfaaa";
     context.fillRect(0, 0, ADJ_CONTAINER_WIDTH, ADJ_CONTAINER_HEIGHT);
   } else {
     context.fillStyle = "#d2cbcd";
