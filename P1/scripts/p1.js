@@ -21,17 +21,18 @@ const ADJ_CONTAINER_WIDTH = CONTAINER_WIDTH * MAGNIFIER;
 const ADJ_CONTAINER_HEIGHT = CONTAINER_HEIGHT * MAGNIFIER;
 
 /*Selects the appropriate color to represent
-the selected insulation option*/
+the selected insulation option
+Author: Alexandra Embree (A00443068)*/
 function changeInsulation() {
   let plan = document.getElementById("plan");
   let context = plan.getContext("2d");
 
   let choice = $("#insulationOptions").find(":selected").text();
 
-  if (choice == "BARE") {
+  if (choice == BARE) {
     context.fillStyle = "#d2cbcd";
     context.fillRect(0, 0, ADJ_CONTAINER_WIDTH, ADJ_CONTAINER_HEIGHT);
-  } else if (choice == "FINISH_ONLY") {
+  } else if (choice == FINISH_ONLY) {
     context.fillStyle = "#e8e5e4";
     context.fillRect(0, 0, ADJ_CONTAINER_WIDTH, ADJ_CONTAINER_HEIGHT);
   } else if (choice == CELLULOSE) {
