@@ -1,4 +1,5 @@
 function init() {
+  drawLogo();
   $("#windowSlider").on("change", function () {
     processInput();
   });
@@ -8,7 +9,6 @@ function init() {
   });
 
   let construction = $("#opaqueThick").val();
-  let constructionType = $("#insulationOptions option:selected").val();
   let window = $("#windowSlider").val();
   draw(construction, window);
 }
@@ -102,7 +102,9 @@ function processInput() {
 function draw(construction, window) {
   let plan = document.getElementById("plan");
   let contextP = plan.getContext("2d");
-
+  const DOOR_X = (plan.width * 2) / 3;
+  const INIT_DOOR_Y = (178 * 3) / 4;
+  const FIN_DOOR_Y = 178 * 27 * MAGNIFIER;
   contextP.clearRect(0, 0, plan.width, 178);
 
   // Slab
@@ -110,40 +112,32 @@ function draw(construction, window) {
   contextP.fillRect(0, 0, plan.width, 182);
 
   // Draw Door
+
   contextP.strokeStyle = "black";
   contextP.lineWidth = MAGNIFIER * 2;
-  contextP.beginPath();
-  contextP.moveTo((plan.width * 2) / 3, (178 * 3) / 4);
-  contextP.lineTo((plan.width * 2) / 3, 178 * 27 * MAGNIFIER);
-  contextP.stroke();
 
-  // Draw door swing
-  contextP.strokeStyle = "black";
-  contextP.lineWidth = MAGNIFIER;
   contextP.beginPath();
-  contextP.setLineDash([4, 3]);
-  contextP.arc(
-    (plan.width * 2) / 3,
-    (178 * 3) / 4,
-    3 * 12 * MAGNIFIER,
-    0,
-    Math.PI * 0.5
-  );
+  contextP.setLineDash([0]);
+  contextP.moveTo(DOOR_X, INIT_DOOR_Y);
+  contextP.lineTo(DOOR_X, FIN_DOOR_Y);
   contextP.stroke();
+  contextP.closePath();
 
-  // TODO Draw insulation HERE
+  // Draw insulation
   changeInsulation();
-
+  const END_RECT_Y = (178 * 3) / 4 - 2 * MAGNIFIER;
   //Draw outer wall
   contextP.setLineDash([0]);
   contextP.strokeStyle = "#3104fb";
   contextP.lineWidth = MAGNIFIER * 2;
+  contextP.beginPath();
   contextP.strokeRect(
     MAGNIFIER,
     MAGNIFIER,
     plan.width - MAGNIFIER * 2,
-    (178 * 3) / 4 - 2 * MAGNIFIER
+    END_RECT_Y
   );
+  contextP.closePath();
 
   // Inner Wall
   contextP.beginPath();
@@ -154,47 +148,149 @@ function draw(construction, window) {
     construction * MAGNIFIER + 4,
     construction * MAGNIFIER + 4,
     plan.width - 2 * construction * MAGNIFIER - 8,
-    (178 * 3) / 4 - 2 * MAGNIFIER - 2 * construction * MAGNIFIER - Number(4)
+    END_RECT_Y - 2 * construction * MAGNIFIER - Number(4)
   );
+
+  // Draw door swing
+  contextP.strokeStyle = "black";
+  contextP.lineWidth = MAGNIFIER;
+  contextP.beginPath();
+  contextP.setLineDash([4, 3]);
+  contextP.arc(DOOR_X, (178 * 3) / 4, 3 * 12 * MAGNIFIER, 0, Math.PI * 0.5);
+  contextP.stroke();
 
   //Inner slab
   contextP.fillStyle = "#d2cbcd";
+  contextP.beginPath();
   contextP.fillRect(
     construction * MAGNIFIER + 4,
     construction * MAGNIFIER + 4,
     plan.width - 2 * construction * MAGNIFIER - 8,
-    (178 * 3) / 4 - 2 * MAGNIFIER - 2 * construction * MAGNIFIER - Number(4)
+    END_RECT_Y - 2 * construction * MAGNIFIER - Number(4)
   );
+  contextP.closePath();
 
-  $("#opaqueThickness").on("change", function () {
-    processInput();
-  });
+  const PLACEMENT = (window / 2) * MAGNIFIER;
 
   // Draw Plan Window
   if (window >= 4) {
+    contextP.lineWidth = MAGNIFIER;
+    contextP.setLineDash([4, 3]);
+    contextP.strokeStyle = "black";
     contextP.fillStyle = "#07ebf8";
+    contextP.beginPath();
     contextP.fillRect(
-      (plan.width / 3) * MAGNIFIER - Number(window / 2) * MAGNIFIER - 25,
+      (plan.width / 3) * MAGNIFIER - PLACEMENT - 25,
       ((178 * 3) / 4 -
-        2 * MAGNIFIER -
+        Number(2 * MAGNIFIER) -
         2 * construction * MAGNIFIER -
-        Number(4) +
+        4 +
         ((178 * 3) / 4 - 2 * MAGNIFIER)) /
         2 +
         MAGNIFIER,
-      2 * Number((window / 2) * MAGNIFIER),
+      Number(2 * PLACEMENT),
       construction * MAGNIFIER + Number(2 * MAGNIFIER)
     );
+    contextP.closePath();
+
+    // Top Dashed Line
+    contextP.setLineDash([3, 4]);
+    contextP.strokeStyle = "black";
+    contextP.moveTo((plan.width / 3) * MAGNIFIER - PLACEMENT - 25,
+     END_RECT_Y-construction*MAGNIFIER
+    );
+    contextP.lineTo(((plan.width / 3) * MAGNIFIER - PLACEMENT - 25) + Number(2 * PLACEMENT),
+    END_RECT_Y-construction*MAGNIFIER
+    );
+    contextP.stroke();
+    contextP.closePath();
+
+    // Bottom Dashed Line
+    contextP.setLineDash([3, 4]);
+    contextP.strokeStyle = "black";
+    contextP.moveTo((plan.width / 3) * MAGNIFIER - PLACEMENT - 25,
+      END_RECT_Y
+    );
+    contextP.lineTo(((plan.width / 3) * MAGNIFIER - PLACEMENT - 25) + Number(2 * PLACEMENT),
+    END_RECT_Y
+    );
+    contextP.stroke();
+    contextP.closePath();
   }
 
-  $("#windowSlider").on("change", function () {
-    processInput();
-  });
+  contextP.setLineDash([4, 3]);
+  contextP.fillStyle = "#d2cbcd";
+  contextP.beginPath();
+  contextP.fillRect(
+    DOOR_X,
+    ((178 * 3) / 4 -
+      Number(2 * MAGNIFIER) -
+      2 * construction * MAGNIFIER -
+      4 +
+      ((178 * 3) / 4 - 2 * MAGNIFIER)) /
+      2 +
+      MAGNIFIER,
+    3 * 12 * MAGNIFIER,
+    construction * MAGNIFIER + Number(2 * MAGNIFIER) * 2
+  );
+  contextP.closePath();
+
+  contextP.setLineDash([4, 3]);
+  contextP.strokeStyle = "black";
+  contextP.beginPath();
+  // Top dashed line
+  contextP.moveTo(
+    DOOR_X,
+    ((178 * 3) / 4 -
+      Number(2 * MAGNIFIER) -
+      2 * construction * MAGNIFIER -
+      4 +
+      ((178 * 3) / 4 - 2 * MAGNIFIER)) /
+      2 +
+      MAGNIFIER
+  );
+  contextP.lineTo(
+    DOOR_X + 3 * 12 * MAGNIFIER,
+    ((178 * 3) / 4 -
+      Number(2 * MAGNIFIER) -
+      2 * construction * MAGNIFIER -
+      4 +
+      ((178 * 3) / 4 - 2 * MAGNIFIER)) /
+      2 +
+      MAGNIFIER
+  );
+
+  // Bottom dashed line
+  contextP.moveTo(
+    DOOR_X,
+    ((178 * 3) / 4 -
+      Number(2 * MAGNIFIER) -
+      2 * construction * MAGNIFIER -
+      4 +
+      ((178 * 3) / 4 - 2 * MAGNIFIER)) /
+      2 +
+      MAGNIFIER +
+      construction * MAGNIFIER +
+      2 * MAGNIFIER
+  );
+  contextP.lineTo(
+    DOOR_X + 3 * 12 * MAGNIFIER,
+    ((178 * 3) / 4 -
+      Number(2 * MAGNIFIER) -
+      2 * construction * MAGNIFIER -
+      4 +
+      ((178 * 3) / 4 - 2 * MAGNIFIER)) /
+      2 +
+      MAGNIFIER +
+      construction * MAGNIFIER +
+      2 * MAGNIFIER
+  );
+  contextP.stroke();
+  contextP.closePath();
 }
 
 function setup() {
   drawLogo();
-  drawPlan();
 }
 
 function drawLogo() {
@@ -204,64 +300,4 @@ function drawLogo() {
   context.font = "bold 30px Georgia";
   context.fillStyle = "blue";
   context.fillText("PROJECT XS", 50, 89);
-}
-
-function drawPlan() {
-  let plan = document.getElementById("plan");
-  let context = plan.getContext("2d");
-
-  context.clearRect(0, 0, plan.width, plan.height);
-
-  // Slab
-  context.fillStyle = "#d2cbcd";
-  context.fillRect(0, 0, plan.width, plan.height);
-
-  // Outer Wall
-  context.strokeStyle = "#3104fb";
-  context.lineWidth = 2 * SCL;
-  context.strokeRect(
-    0,
-    0,
-    plan.width,
-    parseFloat((plan.height * 4) / 5 - 7 * SCL)
-  );
-
-  // Draw the door
-  context.strokeStyle = "black";
-  context.lineWidth = Number(3 * SCL);
-  context.beginPath();
-  context.moveTo(
-    plan.width - 7 * SCL - 3 * 12 * SCL * 2,
-    (plan.height * 4) / 5 - 7 * SCL - 2
-  );
-  context.lineTo(
-    plan.width - 7 * SCL - 3 * 12 * SCL * 2,
-    (plan.height * 4) / 5 - 7 * SCL + 3 * 12 * SCL - 5.5
-  );
-  context.stroke();
-
-  /* TODO Draw door opening
-    context.strokeStyle = "black";
-    context.fillStyle="#d2cbcd" 
-    context.setLineDash([3,4]);
-    context.lineWidth = SCL;
-    context.strokeRect()
-    */
-
-  // Draw door swing
-  context.setLineDash([3, 4]);
-  context.lineWidth = SCL;
-  context.beginPath();
-  context.arc(
-    plan.width - 7 * SCL - 3 * 12 * SCL * 2,
-    (plan.height * 4) / 5 - 7 * SCL - 2,
-    3 * 12 * SCL,
-    0,
-    0.5 * Math.PI
-  );
-  context.stroke();
-
-  // Window
-  let window = $("#windowSlider").val();
-  context.fillStyle = "#07ebf8";
 }
