@@ -10,3 +10,12 @@
 .readout{
     width: 50px !important;
 }
+
+#kWh{
+    width: 75px !important;
+}
+
+#elevation {
+ margin: auto;
+ width: 98%;
+}

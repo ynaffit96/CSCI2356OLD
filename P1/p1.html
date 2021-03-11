@@ -1,7 +1,7 @@
 <!--Structure for Part 1 of Project XS
 Author: Alexandra Embree (A00443068)
 Author: Tiffany Conrad (A00414194)
-Author: Tahira -->
+Author: Tahira Tabassum (A00416670)-->
 
 <!DOCTYPE html5>
 <html>
@@ -46,7 +46,10 @@ Author: Tahira -->
             </div>
 
             <div class="ui-block-c"><!-- Tahira ROW 1 (Dropdown Menu)-->
-              <select name="chapters" id="chapters" data-track-theme="c">
+              <br>
+              <br>
+              <br>
+              <select name="chapters" id="chapters" data-track-theme="c" onchange="clearBottom()">
                 <option value="top">VIEW CHAPTERS</option>
                 <option value="1" disabled="true">Ventilation and Drafts</option>
                 <option value="2">Insulation</option>
@@ -60,9 +63,10 @@ Author: Tahira -->
                 <option value="10" disabled="true">Radiation and Glazing</option>
                 </select>
             </div>
-
+          </div>
+          
           <div class = "ui-block-d"></div>
-
+            <div id="clearedArea" class="ui-grid-c ui-responsive"> <!--Start of bottom 5 rows-->
             <div class="ui-block-a">
               <!-- Tiffany -->
               <canvas id="plan" width="321" height="182"></canvas>
@@ -73,13 +77,15 @@ Author: Tahira -->
               <!--Blank block-->
             </div>
 
-            <div class="ui-block-c"><!-- Tahira (door and elevation)-->
+            <div class="ui-block-c"><!-- Tahira (elevation)-->
+            <div>
             <canvas
-              id="wall"
+              id="elevation"
               width="321"
               height="154">
             </canvas>
             </div>
+          </div>
 
             <div class="ui-block-d"></div>
 
@@ -234,13 +240,8 @@ Author: Tahira -->
             <div class="ui-block-c"><!-- Tahira (Annual Energy)-->
               <table>
                 <tr>
-                  <td>
-                    <div id="wallOut" type="text">
-                    </div>
-                  </td>
-                  <td>
-                      (KWh) Annual Energy
-                  </td>
+                  <td><input class="readout" id="kWh" type="text"></input></td> 
+                  <td>(kWh) Annual Energy</td>
                 </tr>
               </table>
             </div>
@@ -285,6 +286,7 @@ Author: Tahira -->
             <div class="ui-block-d"></div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </body>

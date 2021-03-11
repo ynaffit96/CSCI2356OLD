@@ -1,3 +1,9 @@
+/* This file controls the behaviour of p1.html.
+@Author: Tiffany Conrad A00414194
+@Author Alexandra Embree (A00443068)
+@Author Tahira Tabassum (A00416670)
+*/
+
 function init() {
   drawLogo();
   $("#windowSlider").on("change", function () {
@@ -11,7 +17,11 @@ function init() {
   let construction = $("#opaqueThick").val();
   let window = $("#windowSlider").val();
   draw(construction, window);
+
+  //Ensures bottom of page is cleared at startup
+  clearBottom();
 }
+
 // dropdown menu constants for insulation
 const BARE = "Bare Container (R1)";
 const FINISH_ONLY = "Plus Interior Finish, Uninsulated (R2)";
@@ -19,19 +29,36 @@ const CELLULOSE = "Plus Finish and Cellulose (R3/in)";
 const FIBERGLASS = "Plus Finish and Fiberglass (R3/in)";
 const SPRAY_FOAM = "Plus Finish and Spray Foam (R6/in)";
 
-//Crate proportion for canvas 1 (in inches/before magnification)
+// Crate proportion for canvas 1 (in inches/before magnification)
 const CANVAS_HEIGHT = 132;
 const CANVAS_WIDTH = 238;
 const DOOR_LENGTH = 36;
 const CONTAINER_WIDTH = CANVAS_WIDTH;
 const CONTAINER_HEIGHT = CANVAS_HEIGHT - DOOR_LENGTH;
 
-//When drawing on canvas, always multiply constants by multiplier
+// When drawing on canvas, always multiply constants by multiplier
 const MAGNIFIER = 1.35;
 
 //Adjusted container sizes for drawing
 const ADJ_CONTAINER_WIDTH = CONTAINER_WIDTH * MAGNIFIER;
 const ADJ_CONTAINER_HEIGHT = CONTAINER_HEIGHT * MAGNIFIER;
+
+/*This function hides or shows the bottom half of the page
+depending on selection in "VIEW CHAPTERS" menu.
+
+Author: Alexandra Embree (A00443068)
+*/
+
+function clearBottom() {
+  let choice = $("#chapters").find(":selected").text();
+  let page = document.getElementById("clearedArea");
+
+  if (choice == "VIEW CHAPTERS") {
+    page.hidden = true;
+  } else {
+    page.hidden = false;
+  }
+}
 
 /* Selects the appropriate color to represent
 the selected insulation option
@@ -96,7 +123,7 @@ function processInput() {
   window is the value from the Window slider
 
   @author Tiffany Conrad-- All drawings made on the plan Canvas
-  @author
+  @author Tahira Tabassum
 */
 
 function draw(construction, window) {
@@ -107,11 +134,73 @@ function draw(construction, window) {
   const FIN_DOOR_Y = 178 * 27 * MAGNIFIER;
   contextP.clearRect(0, 0, plan.width, 178);
 
-  // Slab
+  let elevation = document.getElementById("elevation");
+  let contextE = elevation.getContext("2d");
+  contextE.clearRect(0, 0, elevation.width, elevation.height);
+
+  // elevation canvas
+  // filled wall
+  contextE.fillStyle = "#a3bcfd";
+  contextE.fillRect(0, 0, elevation.width, elevation.height);
+
+  // elevation door OUTER
+  contextE.strokeStyle = "black";
+  contextE.strokeRect(
+    (elevation.width * 2) / 3,
+    (elevation.height * 3) / 10 + MAGNIFIER,
+    MAGNIFIER * 3 * 12,
+    MAGNIFIER * (6 * 12) + 3
+  );
+
+  // elevation door INNER
+  contextE.strokeStyle = "black";
+  contextE.strokeRect(
+    (elevation.width * 2) / 3 + 2 * MAGNIFIER,
+    (elevation.height * 3) / 10 + 3 * MAGNIFIER,
+    (MAGNIFIER * 3 * 12 * 9) / 10,
+    ((MAGNIFIER * (6 * 12) + 3) * 18) / 19
+  );
+
+  //elevation door-knob
+  contextE.strokeStyle = "black";
+  contextE.arc(250, 100, 3, 0, 2 * Math.PI);
+  contextE.stroke();
+
+  // elevation window
+  if (window >= 4) {
+    // Outer Window
+    contextE.strokeStyle = "black";
+    contextE.lineWidth = MAGNIFIER;
+    contextE.strokeRect(
+      ((100 * MAGNIFIER - window * MAGNIFIER) / 2) * MAGNIFIER + 25 * MAGNIFIER,
+      ((25 * MAGNIFIER) / 2) * MAGNIFIER + 10 * MAGNIFIER,
+      (((2 * window * MAGNIFIER + Number(4)) / 2) * MAGNIFIER * 3) / 4,
+      (((Number(((3 * window) / 2) * MAGNIFIER) + Number(4)) / 2) *
+        MAGNIFIER *
+        3) /
+        4
+    );
+
+    // Inner Window
+    contextE.strokeRect(
+      ((104 * MAGNIFIER - window * MAGNIFIER) / 2) * MAGNIFIER + 25 * MAGNIFIER,
+      ((29 * MAGNIFIER) / 2) * MAGNIFIER + 10 * MAGNIFIER,
+      (((2 * window * MAGNIFIER) / 2) * MAGNIFIER * 3) / 4 - 4 * MAGNIFIER,
+      (((Number(((3 * window) / 2) * MAGNIFIER) / 2) * MAGNIFIER -
+        2 * MAGNIFIER) *
+        3) /
+        4 -
+        3 * MAGNIFIER
+    );
+    contextE.closePath();
+  }
+
+  // PLAN
+  // Plan Slab
   contextP.fillStyle = "#d2cbcd";
   contextP.fillRect(0, 0, plan.width, 182);
 
-  // Draw Door
+  // Draw Plan Door
 
   contextP.strokeStyle = "black";
   contextP.lineWidth = MAGNIFIER * 2;
@@ -125,6 +214,7 @@ function draw(construction, window) {
 
   // Draw insulation
   changeInsulation();
+
   const END_RECT_Y = (178 * 3) / 4 - 2 * MAGNIFIER;
   //Draw outer wall
   contextP.setLineDash([0]);
@@ -193,26 +283,27 @@ function draw(construction, window) {
     );
     contextP.closePath();
 
-    // Top Dashed Line
+    // Top Dashed Line--PLAN
     contextP.setLineDash([3, 4]);
     contextP.strokeStyle = "black";
-    contextP.moveTo((plan.width / 3) * MAGNIFIER - PLACEMENT - 25,
-     END_RECT_Y-construction*MAGNIFIER
+    contextP.moveTo(
+      (plan.width / 3) * MAGNIFIER - PLACEMENT - 25,
+      END_RECT_Y - construction * MAGNIFIER
     );
-    contextP.lineTo(((plan.width / 3) * MAGNIFIER - PLACEMENT - 25) + Number(2 * PLACEMENT),
-    END_RECT_Y-construction*MAGNIFIER
+    contextP.lineTo(
+      (plan.width / 3) * MAGNIFIER - PLACEMENT - 25 + Number(2 * PLACEMENT),
+      END_RECT_Y - construction * MAGNIFIER
     );
     contextP.stroke();
     contextP.closePath();
 
-    // Bottom Dashed Line
+    // Bottom Dashed Line--PLAN
     contextP.setLineDash([3, 4]);
     contextP.strokeStyle = "black";
-    contextP.moveTo((plan.width / 3) * MAGNIFIER - PLACEMENT - 25,
+    contextP.moveTo((plan.width / 3) * MAGNIFIER - PLACEMENT - 25, END_RECT_Y);
+    contextP.lineTo(
+      (plan.width / 3) * MAGNIFIER - PLACEMENT - 25 + Number(2 * PLACEMENT),
       END_RECT_Y
-    );
-    contextP.lineTo(((plan.width / 3) * MAGNIFIER - PLACEMENT - 25) + Number(2 * PLACEMENT),
-    END_RECT_Y
     );
     contextP.stroke();
     contextP.closePath();
@@ -221,7 +312,7 @@ function draw(construction, window) {
   contextP.setLineDash([4, 3]);
   contextP.fillStyle = "#d2cbcd";
   contextP.beginPath();
-  
+
   contextP.fillRect(
     DOOR_X,
     ((178 * 3) / 4 -
@@ -235,35 +326,35 @@ function draw(construction, window) {
     construction * MAGNIFIER + Number(2 * MAGNIFIER) * 2
   );
   contextP.closePath();
-  
-    if(construction*MAGNIFIER>=4){
-  contextP.setLineDash([4, 3]);
-  contextP.strokeStyle = "black";
-  contextP.beginPath();
-  // Top dashed line
-  contextP.moveTo(
-    DOOR_X,
-    ((178 * 3) / 4 -
-      Number(2 * MAGNIFIER) -
-      2 * construction * MAGNIFIER -
-      4 +
-      ((178 * 3) / 4 - 2 * MAGNIFIER)) /
-      2 +
-      MAGNIFIER
-  );
-  contextP.lineTo(
-    DOOR_X + 3 * 12 * MAGNIFIER,
-    ((178 * 3) / 4 -
-      Number(2 * MAGNIFIER) -
-      2 * construction * MAGNIFIER -
-      4 +
-      ((178 * 3) / 4 - 2 * MAGNIFIER)) /
-      2 +
-      MAGNIFIER
-  );
-    }
 
-  // Bottom dashed line
+  if (construction * MAGNIFIER >= 4) {
+    contextP.setLineDash([4, 3]);
+    contextP.strokeStyle = "black";
+    contextP.beginPath();
+    // Top dashed line
+    contextP.moveTo(
+      DOOR_X,
+      ((178 * 3) / 4 -
+        Number(2 * MAGNIFIER) -
+        2 * construction * MAGNIFIER -
+        4 +
+        ((178 * 3) / 4 - 2 * MAGNIFIER)) /
+        2 +
+        MAGNIFIER
+    );
+    contextP.lineTo(
+      DOOR_X + 3 * 12 * MAGNIFIER,
+      ((178 * 3) / 4 -
+        Number(2 * MAGNIFIER) -
+        2 * construction * MAGNIFIER -
+        4 +
+        ((178 * 3) / 4 - 2 * MAGNIFIER)) /
+        2 +
+        MAGNIFIER
+    );
+  }
+
+  // Bottom dashed line PLAN
   contextP.moveTo(
     DOOR_X,
     ((178 * 3) / 4 -
@@ -292,10 +383,6 @@ function draw(construction, window) {
   contextP.closePath();
 }
 
-function setup() {
-  drawLogo();
-}
-
 function drawLogo() {
   let logo = document.getElementById("log");
   let context = logo.getContext("2d");
@@ -304,3 +391,4 @@ function drawLogo() {
   context.fillStyle = "blue";
   context.fillText("PROJECT XS", 50, 89);
 }
+
