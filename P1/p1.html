@@ -167,10 +167,13 @@ Author: Tahira Tabassum (A00416670)-->
                 name="doorThermalResistanceSlider"
                 id="doorSlider"
                 data-theme = "c"
+                onchange = "doorThermalResistanceOutput()"
+                min="2"
+                max="12"
               />
               <table>
                 <tr>
-                  <td><input id = "doorSliderReadout" class="readout" type ="text" for ="doorSlider"></input></td>
+                  <td><input id = "doorSliderReadout" class="readout" type ="text" for ="doorSlider" value="2" min="2" max="12"></input></td>
                   <td>(R) Door Thermal Resistance</td>
                 </tr>
               </table>
@@ -183,10 +186,10 @@ Author: Tahira Tabassum (A00416670)-->
 
             <div class="ui-block-c"><!-- Tahira (Second slider, window thermal resistance)-->
             
-              <input type="range" id="windThermal" ></input>
+              <input type="range" id="windThermal" value="1" min="1" max="10" onchange="windowThermalResistanceOutput()"></input>
               <table>
                 <tr>
-                  <td><input id="windowThermal" type="text" class="readout"></input></td> 
+                  <td><input id="windowThermal" type="text" class="readout" value="1"></input></td> 
                   <td>(R) Window Thermal Resistance</td>
                 </tr>
               </table>
@@ -200,8 +203,8 @@ Author: Tahira Tabassum (A00416670)-->
               <input
                 id="windowSlider"
                 type="range"
-                value="2"
-                min="2"
+                value="0"
+                min="0"
                 max="108"
                 ui-slider-input="false"
                 data-hightlight="true"
@@ -214,7 +217,7 @@ Author: Tahira Tabassum (A00416670)-->
                 <table>
                   <tr>
                     <td><div id="winSlidOutDIV">
-                    <input id = "winSlidOut" class="readout" type = "text" for = "windowSlider" val="2"></input>
+                    <input id = "winSlidOut" class="readout" type = "text" for = "windowSlider" val="0"></input>
                   </div></td>
                     <td>
                       (SQ FT.) Window Area

@@ -114,6 +114,7 @@ function processInput() {
   let constructionType = $("#insulationOptions option:selected").val();
   let window = $("#windowSlider").val();
   draw(construction, window);
+  calculateOutputBoxes(construction, window);
 }
 
 /*
@@ -392,3 +393,38 @@ function drawLogo() {
   context.fillText("PROJECT XS", 50, 89);
 }
 
+/**
+ * This function calculates and prints the appropriate output for the window area in sq ft
+ * in the "Window Area" readout, and prints the opaque thickness readout in inches.
+ *
+ * @author Alexandra Embree
+ */
+function calculateOutputBoxes(construction, window) {
+  //prints opaque thickness in readout box (to be modified***)
+  $("#opaqueThickness").val(construction);
+
+  // calculates window area in square feet and truncates the result
+  let windowArea = (window / 12) * (((window / 12) * 3) / 4);
+  let windowAreaTrunc = Math.trunc(Number(windowArea) * 10) / 10;
+
+  // prints window area value in readoutbox
+  $("#winSlidOut").val(windowAreaTrunc);
+}
+
+/**
+ * This function fills in the door thermal output box based on the slider value.
+ * @author Alexandra Embree
+ */
+function doorThermalResistanceOutput() {
+  let doorThermalResistance = $("#doorSlider").val();
+  $("#doorSliderReadout").val(doorThermalResistance);
+}
+
+/**
+ * This function fills in the window thermal output box based on the slider value.
+ * @author Alexandra Embree
+ */
+function windowThermalResistanceOutput() {
+  let windowThermalResistance = $("#windThermal").val();
+  $("#windowThermal").val(windowThermalResistance);
+}
