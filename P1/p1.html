@@ -139,7 +139,7 @@ Author: Tahira Tabassum (A00416670)-->
 
             <div class="ui-block-c"><!-- Tahira (first slider, white box)-->
             
-              <input type="range" id="opaqueThick" min="2" max = "14" ui-slider-input="false" data-highlight = "true" data-theme="c" data-track-theme="c"></input>
+              <input type="range" id="opaqueThick" step = "0.5" min="2" max = "14" ui-slider-input="false" data-highlight = "true" data-theme="c" data-track-theme="c"></input>
 
               <table>
                 <tr>
@@ -272,19 +272,20 @@ Author: Tahira Tabassum (A00416670)-->
 
 
             <div class="ui-block-c"><!-- Tahira -->
-              <select id="concepts">
+              <select id="concepts" onchange = "concept()">
                 <option value="default">CONCEPTS</option>
-                <option value="Local Conditions"></option>
-                <option value="Annual Energy Budget"></option>
-                <option value="Drafts and Ventilation"></option>
-                <option value="Insulation and Heat Loss"></option>
-                <option value="Material and Insulation"></option>
-                <option value="Environmental Impact"></option>
+                <option value="1">Local Conditions</option>
+                <option value="2">Annual Energy Budget</option>
+                <option value="3">Drafts and Ventilation</option>
+                <option value="4">Insulation and Heat Loss</option>
+                <option value="5">Material and Insulation</option>
+                <option value="6">Environmental Impact</option>
               </select>
             </div>
 
             <div class="ui-block-d"></div>
           </div>
+          <div id="text"></div>
         </div>
       </div>
       </div>
