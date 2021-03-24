@@ -14,6 +14,22 @@ function init() {
     processInput();
   });
 
+  $("#doorSlider").on("change", function () {
+    processInput();
+  });
+
+  $("#windThermal").on("change", function () {
+    processInput();
+  });
+
+  $("#insulationOptions").on("change", function () {
+    processInput();
+  });
+
+  $("#degrees").on("change", function () {
+    processInput();
+  });
+
   let construction = $("#opaqueThick").val();
   let window = $("#windowSlider").val();
   draw(construction, window);
@@ -113,10 +129,31 @@ function processInput() {
   let construction = $("#opaqueThick").val();
   let constructionType = $("#insulationOptions option:selected").val();
   let window = $("#windowSlider").val();
+  let opaqueThickness = $("#opaqueThickness").val();
+  let opaqueConstructionWithR = $("#insulationOptions").val();
+
+  let windowThermalResistance = $("#windowThermal").val();
+  let doorThermalResistance = $("#doorSliderReadout").val();
+
   draw(construction, window);
-  opaqueThick(construction,constructionType);
+  opaqueThick(construction, constructionType);
   calculateOutputBoxes(construction, window);
 
+  $("#opaqueThermal").val(
+    opaqueThermalResistanceOutput(opaqueThickness, opaqueConstructionWithR)
+  );
+  $("#effectiveOverallReadout").val(
+    effectiveOverallThermalResistanceOutput(
+      opaqueThermalResistanceOutput(opaqueThickness, opaqueConstructionWithR),
+      windowThermalResistance,
+      doorThermalResistance
+    )
+  );
+
+  $("#kWh").val(annualEnergyOutput());
+
+  doorThermal();
+  windowThermal();
 }
 
 /*
@@ -396,93 +433,130 @@ function drawLogo() {
   context.fillText("PROJECT XS", 50, 89);
 }
 
-
-
 /**
  * This function fills in the door thermal output box based on the slider value.
  * @author Alexandra Embree
  */
- function doorThermalResistanceOutput() {
+function doorThermalResistanceOutput() {
   let doorThermalResistance = $("#doorSlider").val();
   $("#doorSliderReadout").val(doorThermalResistance);
 }
 
-
 /**
  *  This function writes the concepts, depending on the user's choice from the Concepts dropdown menu
  */
-function concept(){
+function concept() {
   let concept = $("#concepts").val();
-  if (concept === "1"){
-    $("#text").html("Local Conditions: </br></br> Heating demand is given in heating degree-days. "+
-    "The length of a Canadian heating season is the number of days below 18&#8451. Coldness is the difference between a"+
-    " desired indoor temperature of 20&#8451 and the average outdoor temperature on those days </br></br>"+
-    "Humidity and especially windiness of a location also add to heating demand but are discussed elsewhere.</br></br>"+
-    "Warmer climates imply a cooling load: also a subject for other chapters.</br></br>"+
-    "Please note that to reflect the Canadian experience, this App mixes units: Celsius for temperature, for example, but inches for dimensions"); 
-  } else if(concept === "2"){
-    $("#text").html("Annual Energy Budget:</br></br>Envelope heat loss is only part of an energy budget. Lights, hot water appliances "+
-    "and electronics also consume energy. In this chapter those other loads are fixed, on the assumption that use of the building remains "+
-    "constant in all locations.</br></br>Envelope heat loss has at least two components: the effectively conductive losses that can be "+
-    "reduced by insulation, and lossed due to ventilation and drafts. Both are proportional to heat demand. Looking at the Energy Budget"+
-    " Graph, you will see that changing the insulation levels changes the conductive or insulation losses but not those due to air movement.");
-  }else if(concept === "3"){
-    $("#text").html("Drafts and Ventilation:</br></br>Realistically, a larger window would admit more drafts, especially at the lower end of "+
-    "the quality scale, but that effect is ignored in the insulation chapter.</br></br>The Drafts and Ventilation chapter explains how energy"+
-    " losses due to infiltration are controlled by membranes, sealants, joint design, and meticulous quality control. It shows how"+
-    " ventilation losses can be managed through heat exchange, flow controls, and careful use of operable windows and vents.");
-  }else if(concept === "4"){
-    $("#text").html("Insulation and Heat Loss:</br></br>In North America, thermal resistance is measured in R-Values. The resistance"+
-    " of a material barrier is a product of its resistivity, in R/inch, and the inches of thickness. The actual effectiveness of insulation "+
-    "depends on other factors, but this app gives drywall an R/inch of 1, fiberglass and cellulose insulation an R/inch of 3, and urethane "+
-    "spray foam an R/inch of 6.</br></br>In thin and poorly insulating assemblies, air films become significant. This is how painted sheet "+
-    "steel ends up with a nominal R of 1. When assemblies are layered, R values can simply be totalled.");
-  }else if(concept === "5"){
-    $("#text").html("Materials and Insulation</br></br>Heat flow is inversely related to thermal resistance. The conduction of heat through "+
-    "a material is given as a U value, which is equal to 1/R. Add layers into a single R value before finding their U value.</br></br>"+
-    "Heat loss is a product of thermal demand and conductive liability. Thermal demand consolidates temperature differemce and time, as "+
-    "in degree days. Thermal liability is a product of surface area and conductance</br></br>The total thermal liability of an envelope "+
-    "is a sum of the liability of its portions. Average conductance divides the total liability by the total area. The effective R-value "+
-    "of an envelope is the inverse of average conductance.</br></br>Note that high R-value portions of an envelope have a smaller effect on "+
-    "the effective R-value than might be supposed. Conversely, low-R-value portions of an envelope such as windows have a larger effect on over"+
-    "all heat loss than their small area may suggest.");
-  }else if(concept === "6"){
-    $("#text").html("Environmental Impact</br></br>The environmental impact of construction depends not only on the energy consumed in operating "+
-    "a building, but in the energy consumed or 'embodied' in the material through sourcing, manufacture, transport, and assembly. Additionally, tox"+
-    "ins and other ecological and social injuries need to be accounted for. The exact calculations are complicated and debatable, but that's no reas"+
-    "on to ignore them. They are the subject of several other chapters.");
-  }else{
+  if (concept === "1") {
+    $("#text").html(
+      "Local Conditions: </br></br> Heating demand is given in heating degree-days. " +
+        "The length of a Canadian heating season is the number of days below 18&#8451. Coldness is the difference between a" +
+        " desired indoor temperature of 20&#8451 and the average outdoor temperature on those days </br></br>" +
+        "Humidity and especially windiness of a location also add to heating demand but are discussed elsewhere.</br></br>" +
+        "Warmer climates imply a cooling load: also a subject for other chapters.</br></br>" +
+        "Please note that to reflect the Canadian experience, this App mixes units: Celsius for temperature, for example, but inches for dimensions"
+    );
+  } else if (concept === "2") {
+    $("#text").html(
+      "Annual Energy Budget:</br></br>Envelope heat loss is only part of an energy budget. Lights, hot water appliances " +
+        "and electronics also consume energy. In this chapter those other loads are fixed, on the assumption that use of the building remains " +
+        "constant in all locations.</br></br>Envelope heat loss has at least two components: the effectively conductive losses that can be " +
+        "reduced by insulation, and lossed due to ventilation and drafts. Both are proportional to heat demand. Looking at the Energy Budget" +
+        " Graph, you will see that changing the insulation levels changes the conductive or insulation losses but not those due to air movement."
+    );
+  } else if (concept === "3") {
+    $("#text").html(
+      "Drafts and Ventilation:</br></br>Realistically, a larger window would admit more drafts, especially at the lower end of " +
+        "the quality scale, but that effect is ignored in the insulation chapter.</br></br>The Drafts and Ventilation chapter explains how energy" +
+        " losses due to infiltration are controlled by membranes, sealants, joint design, and meticulous quality control. It shows how" +
+        " ventilation losses can be managed through heat exchange, flow controls, and careful use of operable windows and vents."
+    );
+  } else if (concept === "4") {
+    $("#text").html(
+      "Insulation and Heat Loss:</br></br>In North America, thermal resistance is measured in R-Values. The resistance" +
+        " of a material barrier is a product of its resistivity, in R/inch, and the inches of thickness. The actual effectiveness of insulation " +
+        "depends on other factors, but this app gives drywall an R/inch of 1, fiberglass and cellulose insulation an R/inch of 3, and urethane " +
+        "spray foam an R/inch of 6.</br></br>In thin and poorly insulating assemblies, air films become significant. This is how painted sheet " +
+        "steel ends up with a nominal R of 1. When assemblies are layered, R values can simply be totalled."
+    );
+  } else if (concept === "5") {
+    $("#text").html(
+      "Materials and Insulation</br></br>Heat flow is inversely related to thermal resistance. The conduction of heat through " +
+        "a material is given as a U value, which is equal to 1/R. Add layers into a single R value before finding their U value.</br></br>" +
+        "Heat loss is a product of thermal demand and conductive liability. Thermal demand consolidates temperature differemce and time, as " +
+        "in degree days. Thermal liability is a product of surface area and conductance</br></br>The total thermal liability of an envelope " +
+        "is a sum of the liability of its portions. Average conductance divides the total liability by the total area. The effective R-value " +
+        "of an envelope is the inverse of average conductance.</br></br>Note that high R-value portions of an envelope have a smaller effect on " +
+        "the effective R-value than might be supposed. Conversely, low-R-value portions of an envelope such as windows have a larger effect on over" +
+        "all heat loss than their small area may suggest."
+    );
+  } else if (concept === "6") {
+    $("#text").html(
+      "Environmental Impact</br></br>The environmental impact of construction depends not only on the energy consumed in operating " +
+        "a building, but in the energy consumed or 'embodied' in the material through sourcing, manufacture, transport, and assembly. Additionally, tox" +
+        "ins and other ecological and social injuries need to be accounted for. The exact calculations are complicated and debatable, but that's no reas" +
+        "on to ignore them. They are the subject of several other chapters."
+    );
+  } else {
     $("#text").html("");
   }
-
 }
+
+/***
+ * 
+ * This function changes the readout for Door Thermal Resistance
+ * 
+ * @author Tiffany Conrad (A00414194)
+ * 
+ */
+
+function doorThermal(){
+  let slider = $("#doorSlider").val();
+
+  $("#doorSliderReadout").val(slider);
+}
+
+
+/***
+ * 
+ * This function changes the readout for Window Thermal Resistance
+ * 
+ * @author Tiffany Conrad (A00414194)
+ */
+
+function windowThermal(){
+  let slider = $("#windThermal").val();
+  $("#windowThermal").val(slider);
+}
+
+
 
 /**
  * This function fills the opaque thickness readout as it corresponds with the slider
- * 
- * 
+ *
+ * @author Tiffany Conrad (A00414194)
+ *
  * @param  construction The Opaque Thickness Slider
  * @param  constructionType The chosen insulation
  */
-function opaqueThick(construction,constructionType){
+function opaqueThick(construction, constructionType) {
   let slider = $("#opaqueThick").val();
   let readout = $("#opaqueThickness").val(construction);
 
   let wallR = 0;
 
-  while(construction <= 4){
+  while (construction <= 4) {
     readout.val(2);
     break;
   }
-  if(construction >= 4 && constructionType != "top" && construction != 2){
-    let DTI = construction-2;
+  if (construction >= 4 && constructionType != "top" && construction != 2) {
+    let DTI = construction - 2;
     let materialR = $("construction option:selected").val();
-    wallR = 2 + DTI * materialR*slider;
+    wallR = 2 + DTI * materialR * slider;
     readout.val(wallR);
-  } else if (construction <= 4){
+  } else if (construction <= 4) {
     readout.val(4);
   }
-
 }
 
 /**
@@ -510,4 +584,65 @@ function calculateOutputBoxes(construction, window) {
 function windowThermalResistanceOutput() {
   let windowThermalResistance = $("#windThermal").val();
   $("#windowThermal").val(windowThermalResistance);
+}
 
+/**
+ * This function calculates the Opaque Thermal Resistance using the given formula
+ * D = 2 + (C_output - 2) * B
+ * @author Tahira Tabassum
+ */
+function opaqueThermalResistanceOutput(
+  opaqueThickness,
+  opaqueConstructionWithR
+) {
+  if (opaqueConstructionWithR != "top") {
+    return Math.trunc(2 + (opaqueThickness - 2) * opaqueConstructionWithR);
+  } else {
+    return "";
+  }
+}
+
+/** This function calculates the Effective Overall Thermal Resistance using the given formula, which also initialy appears blank
+ * H = 1/ (((800 - G_output)/D + G_output / F_output + 20 / E_output) / 820)
+ * @author Tahira Tabassum
+ */
+function effectiveOverallThermalResistanceOutput(
+  opaqueThermalResistanceOutput,
+  windowThermalResistanceOutput,
+  doorThermalResistanceOutput
+) {
+  let windowArea = $("#winSlidOut").val();
+
+  if (opaqueThermalResistanceOutput != "") {
+    return Math.trunc(
+      1 /
+        (((800 - windowArea) / opaqueThermalResistanceOutput +
+          windowArea / windowThermalResistanceOutput +
+          20 / doorThermalResistanceOutput) /
+          820)
+    );
+  } else {
+    return "";
+  }
+}
+
+/**
+ * This function calculates the Annual Energy using the given formula, which also initialy appears blank
+ * I = (820*A*1.8*24/H) /3412 + A*1.8*24*65/3412 + 3000
+ * @author Tahira Tabassum
+ */
+function annualEnergyOutput() {
+  let windowThermal = $("#windThermal").val();
+  let doorThermal = $("#doorSlider").val();
+  let opaqueConstructionWithR = $("#insulationOptions").val();
+  let degrees = $("#degrees").val();
+  let opaqueThickness = $("#opaqueThickness").val();
+
+  if(windowThermal >= 1 && doorThermal >= 2 && opaqueConstructionWithR !=0 && $("#degrees").val()!="top"){
+  return Math.trunc((820*degrees*1.8*24/opaqueThermalResistanceOutput(opaqueThickness, opaqueConstructionWithR),
+  windowThermal,
+  doorThermal)/3412+degrees*1.8*24*65/3412+3000);
+      } else{
+        return "";
+      }
+}
