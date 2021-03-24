@@ -503,33 +503,30 @@ function concept() {
 }
 
 /***
- * 
+ *
  * This function changes the readout for Door Thermal Resistance
- * 
+ *
  * @author Tiffany Conrad (A00414194)
- * 
+ *
  */
 
-function doorThermal(){
+function doorThermal() {
   let slider = $("#doorSlider").val();
 
   $("#doorSliderReadout").val(slider);
 }
 
-
 /***
- * 
+ *
  * This function changes the readout for Window Thermal Resistance
- * 
+ *
  * @author Tiffany Conrad (A00414194)
  */
 
-function windowThermal(){
+function windowThermal() {
   let slider = $("#windThermal").val();
   $("#windowThermal").val(slider);
 }
-
-
 
 /**
  * This function fills the opaque thickness readout as it corresponds with the slider
@@ -638,11 +635,22 @@ function annualEnergyOutput() {
   let degrees = $("#degrees").val();
   let opaqueThickness = $("#opaqueThickness").val();
 
-  if(windowThermal >= 1 && doorThermal >= 2 && opaqueConstructionWithR !=0 && $("#degrees").val()!="top"){
-  return Math.trunc((820*degrees*1.8*24/opaqueThermalResistanceOutput(opaqueThickness, opaqueConstructionWithR),
-  windowThermal,
-  doorThermal)/3412+degrees*1.8*24*65/3412+3000);
-      } else{
-        return "";
-      }
+  if (
+    windowThermal >= 1 &&
+    doorThermal >= 2 &&
+    opaqueConstructionWithR != 0 &&
+    $("#degrees").val() != "top"
+  ) {
+    return Math.trunc(
+      ((820 * degrees * 1.8 * 24) /
+        opaqueThermalResistanceOutput(opaqueThickness, opaqueConstructionWithR),
+      windowThermal,
+      doorThermal) /
+        3412 +
+        (degrees * 1.8 * 24 * 65) / 3412 +
+        3000
+    );
+  } else {
+    return "";
+  }
 }
